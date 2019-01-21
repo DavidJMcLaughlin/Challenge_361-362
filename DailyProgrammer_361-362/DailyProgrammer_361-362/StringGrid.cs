@@ -28,20 +28,26 @@ namespace DailyProgrammer_361_362
                     );
             }
 
-            this.GridWidth = width;
-            this.GridHeight = height;
+            this.Width = width;
+            this.Height = height;
 
             this._inputString = input;
-            this._grid = CreateGrid(this.GridWidth, this.GridHeight, this._inputString);
+            this._grid = CreateGrid(this.Width, this.Height, this._inputString);
         }
 
         private readonly string _inputString;
         private readonly char[,] _grid;
 
-        public int GridWidth { get; private set; }
-        public int GridHeight { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public int Length { get { return (this.Width * this.Height); } }
 
         public char[,] Grid => this._grid;
+
+        public char this[int y, int x]
+        {
+            get { return _grid[x,y]; }
+        }
 
         protected char[,] CreateGrid(int height, int width, string input)
         {
@@ -57,11 +63,11 @@ namespace DailyProgrammer_361_362
             }
 
             int indexOfPaddedString = 0;
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < height; j++)
                 {
-                    tmpGrid[i, j] = paddedInput[indexOfPaddedString];
+                    tmpGrid[j, i] = paddedInput[indexOfPaddedString];
                     indexOfPaddedString++;
                 }
             }
@@ -72,6 +78,22 @@ namespace DailyProgrammer_361_362
         protected virtual string PadStringForGrid(int totalGridSize, string input, char paddingCharacter = '+')
         {
             return input.PadRight(totalGridSize, paddingCharacter);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int y = 0; y < this.Height; y++)
+            {
+                for (int x = 0; x < this.Width; x++)
+                {
+                    sb.Append(this._grid[x,y]);
+                }
+                sb.Append('\n');
+            }
+
+            return sb.ToString();
         }
     }
 }
